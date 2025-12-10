@@ -1,12 +1,49 @@
-Black-Jack_Robert_J_Ventura.py
-
+#Black-Jack_Robert_J_Ventura.py
 import random
 
-cards = [["Ace": 1, 11], ["2": 2], ["3": 3], ["4", 4], ["5": 5], ["6": 6], ["7": 7], ["8": 8], ["9": 9], ["Jack": 10], ["Queen": 10] ["King": 10]]
+cards = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
 
-#Random Cards for player1
-def player1_cards:
-  values = list(cards.values())
-  cards_player1 = random.choices(values, k=2)
+# Uses random.choices to get 2 cards for player 1
+def randomPlayerOneCards():
+    randomCards = random.choices(cards, k=2)
+    first_card = randomCards[0]
+    second_card = randomCards[1]
 
-print(player1_cards)
+    # Convert first card
+    if first_card == 'Ace':
+        first_card = aceInteger(first_card)
+    elif first_card in ['Queen', 'Jack', 'King']:
+        first_card = 10
+    
+    # Convert second card
+    if second_card == 'Ace':
+        second_card = aceInteger(second_card)
+    elif second_card in ['Queen', 'Jack', 'King']:
+        second_card = 10
+    
+    print(randomCards)
+    print(f"Your sum for both cards is: {sum_of_cards(first_card, second_card)}")
+    return randomCards
+
+# Does the same as player 1 but for player 2 now
+def randomPlayerTwoCards():
+    randomCards = random.choices(cards, k=2)
+    #print(randomCards)
+    return randomCards
+
+# This checks if a certain card is an ace and askes the user to make it into a 1 or 11 if any other string or integer
+# is inputed will print error message and repeat until the 1 or 11 is inputed
+def aceInteger(card):
+    while True:
+        try:
+            value = int(input("You got an Ace! Enter 1 or 11: "))
+            if value in (1, 11):
+                return value
+        except ValueError:
+            pass
+        print("Invalid input. Please enter 1 or 11.")
+
+def sum_of_cards(first_card, second_card):
+    return first_card + second_card
+
+randomPlayerOneCards()
