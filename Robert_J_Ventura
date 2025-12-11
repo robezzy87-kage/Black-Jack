@@ -2,6 +2,7 @@
 import random
 
 cards = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
+#player_one_name = input('If you want enter a username here else enter \"None\" : ')
 
 # Uses random.choices to get 2 cards for player 1
 def randomPlayerOneCards():
@@ -9,20 +10,26 @@ def randomPlayerOneCards():
     first_card = randomCards[0]
     second_card = randomCards[1]
 
-    # Convert first card
+    print(randomCards)
+
+    first_card = face_cards_converter(first_card)
+    second_card = face_cards_converter(second_card)
+
     if first_card == 'Ace':
         first_card = aceInteger(first_card)
-    elif first_card in ['Queen', 'Jack', 'King']:
-        first_card = 10
-    
-    # Convert second card
+
     if second_card == 'Ace':
-        second_card = aceInteger(second_card)
-    elif second_card in ['Queen', 'Jack', 'King']:
-        second_card = 10
+        second_card = aceInteger(first_card)
     
-    print(randomCards)
     print(f"Your sum for both cards is: {sum_of_cards(first_card, second_card)}")
+    
+    user_hit_stand = hit_stand()
+    
+    if user_hit_stand == 'hit':
+        new_card = random.choices(cards)
+        new_card = face_cards_converter(new_card)
+        print(card)
+
     return randomCards
 
 # Does the same as player 1 but for player 2 now
@@ -33,7 +40,7 @@ def randomPlayerTwoCards():
 
 # This checks if a certain card is an ace and askes the user to make it into a 1 or 11 if any other string or integer
 # is inputed will print error message and repeat until the 1 or 11 is inputed
-def aceInteger(card):
+def aceInteger():
     while True:
         try:
             value = int(input("You got an Ace! Enter 1 or 11: "))
@@ -41,9 +48,24 @@ def aceInteger(card):
                 return value
         except ValueError:
             pass
-        print("Invalid input. Please enter 1 or 11.")
+        print("Invalid input. Please enter 1 or 11. ")
 
 def sum_of_cards(first_card, second_card):
     return first_card + second_card
+
+def face_cards_converter(card):
+    if card in ['Queen', 'Jack', 'King']:
+        card = 10
+    return card
+
+def hit_stand():
+    while True:
+        try:
+            value =  input("Would you like to hit or stand? ").strip().lower()
+            if value in ('hit', 'stand'):
+                return value
+        except ValueError:
+            pass
+        print("Invalid input. Please enter \"hit\" or \"stand\". ")
 
 randomPlayerOneCards()
