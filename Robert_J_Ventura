@@ -1,36 +1,46 @@
 #Black-Jack_Robert_J_Ventura.py
 import random
 
-cards = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
+cards = ['Ace', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
 #player_one_name = input('If you want enter a username here else enter \"None\" : ')
 
 # Uses random.choices to get 2 cards for player 1
+def card_value(card):
+    if card in ['Queen', 'Jack', 'King']:
+        return 10
+    if card == 'Ace':
+        return aceInteger(card)
+    return int(card)
+
+
 def randomPlayerOneCards():
     randomCards = random.choices(cards, k=2)
     first_card = randomCards[0]
     second_card = randomCards[1]
-
+    users_cards = []
     print(randomCards)
 
-    first_card = face_cards_converter(first_card)
-    second_card = face_cards_converter(second_card)
+    users_cards.append(card_value(first_card))
+    users_cards.append(card_value(second_card))
 
-    if first_card == 'Ace':
-        first_card = aceInteger(first_card)
+    print(f"Your sum for both cards is: {sum(users_cards)}")
 
-    if second_card == 'Ace':
-        second_card = aceInteger(first_card)
-    
-    print(f"Your sum for both cards is: {sum_of_cards(first_card, second_card)}")
-    
     user_hit_stand = hit_stand()
-    
-    if user_hit_stand == 'hit':
-        new_card = random.choices(cards)
-        new_card = face_cards_converter(new_card)
-        print(card)
 
-    return randomCards
+    while user_hit_stand == 'hit':
+        new_card = random.choice(cards)
+        users_cards.append(card_value(new_card))
+        print(new_card)
+        print(f"Your new sum is: {sum(users_cards)}")
+        if sum (users_cards) > 21:
+            print("you busted!")
+            break
+        elif sum(users_cards) == 21:
+            print("Blackjack!")
+            break 
+        user_hit_stand = hit_stand()
+
+    return users_cards
 
 # Does the same as player 1 but for player 2 now
 def randomPlayerTwoCards():
@@ -40,23 +50,26 @@ def randomPlayerTwoCards():
 
 # This checks if a certain card is an ace and askes the user to make it into a 1 or 11 if any other string or integer
 # is inputed will print error message and repeat until the 1 or 11 is inputed
-def aceInteger():
-    while True:
-        try:
-            value = int(input("You got an Ace! Enter 1 or 11: "))
-            if value in (1, 11):
-                return value
-        except ValueError:
-            pass
-        print("Invalid input. Please enter 1 or 11. ")
+def aceInteger(ace):
+    if ace == 'Ace':
+        while True:
+            try:
+                value = int(input("You got an Ace! Enter 1 or 11: "))
+                if value in (1, 11):
+                    return value
+            except ValueError:
+                pass
+            print("Invalid input. Please enter 1 or 11. ")
 
-def sum_of_cards(first_card, second_card):
-    return first_card + second_card
 
 def face_cards_converter(card):
     if card in ['Queen', 'Jack', 'King']:
         card = 10
     return card
+
+def sum_of_cards(first_card, second_card, third_card, fourth_card, fifth_card, sixth_card):
+    return first_card + second_card + third_card + fourth_card + fifth_card + sixth_card
+
 
 def hit_stand():
     while True:
