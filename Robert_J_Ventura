@@ -1,19 +1,42 @@
 #Black-Jack_Robert_J_Ventura.py
 import random
 
-cards = ['Ace', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
-#player_one_name = input('If you want enter a username here else enter \"None\" : ')
+# Global variables to keep track of the number of games played and wins
+cards_played = 0
+player_wins = 0
+computer_wins = 0
 
-# Uses random.choices to get 2 cards for player 1
+# List of possible cards in the game
+cards = ['Ace', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
+
+# Welcoming the player and explaining the rules
+player_one_name = input('Enter Player 1 name: ')
+print(f'Welcome {player_one_name} to Black Jack!')
+print('Rules: Get as close to 21 as possible without going over. Face cards are worth 10. Aces are worth 1 or 11. enjoy!')
+
+# Function to determine the value of a card for the player
 def card_value(card):
+
+    # Face cards are worth 10
     if card in ['Queen', 'Jack', 'King']:
         return 10
     if card == 'Ace':
         return aceInteger(card)
     return int(card)
 
+def card_value_npc(card):
 
-def randomPlayerOneCards():
+    # Face cards are worth 10
+    if card in ['Queen', 'Jack', 'King']:
+        return 10
+    # For computer, we will treat Ace as 11 unless it causes a bust
+    if card == 'Ace':
+        return 11
+    return int(card)
+
+
+# Uses random.choices to get 2 cards for player
+def playerCards():
     randomCards = random.choices(cards, k=2)
     first_card = randomCards[0]
     second_card = randomCards[1]
@@ -27,29 +50,65 @@ def randomPlayerOneCards():
 
     user_hit_stand = hit_stand()
 
+    # Loop to allow the player to hit or stand
     while user_hit_stand == 'hit':
         new_card = random.choice(cards)
         users_cards.append(card_value(new_card))
         print(new_card)
         print(f"Your new sum is: {sum(users_cards)}")
-        if sum (users_cards) > 21:
+        if sum(users_cards) > 21:
             print("you busted!")
             break
         elif sum(users_cards) == 21:
             print("Blackjack!")
             break 
         user_hit_stand = hit_stand()
-
     return users_cards
 
-# Does the same as player 1 but for player 2 now
-def randomPlayerTwoCards():
-    randomCards = random.choices(cards, k=2)
-    #print(randomCards)
-    return randomCards
 
-# This checks if a certain card is an ace and askes the user to make it into a 1 or 11 if any other string or integer
-# is inputed will print error message and repeat until the 1 or 11 is inputed
+# Uses random.choices to get 2 cards for computer
+def computerCards():
+    randomCards = random.choices(cards, k=2)
+    first_card = randomCards[0]
+    second_card = randomCards[1]
+    computer_cards = []
+    print(randomCards)
+
+    computer_cards.append(card_value_npc(first_card))
+    computer_cards.append(card_value_npc(second_card))
+
+    print(f"Computer's sum for both cards is: {sum(computer_cards)}")
+
+    # Loop to allow the computer to hit until reaching at least 17
+    while sum(computer_cards) < 17:
+        new_card = random.choice(cards)
+        if new_card == 'Ace' and sum(computer_cards) + 11 > 21:
+            computer_cards.append(1)
+        computer_cards.append(card_value_npc(new_card))
+        print(new_card)
+        print(f"Computer's new sum is: {sum(computer_cards)}")
+        if sum(computer_cards) > 21:
+            print("Computer busted!")
+            break
+        elif sum(computer_cards) == 21:
+            print("Computer got Blackjack!")
+            break 
+    return computer_cards
+
+# Determines the winner based on the sums of player and computer cards
+def determine_winner(player_cards, computer_cards):
+    player_sum = sum(player_cards)
+    computer_sum = sum(computer_cards)
+
+    # Both players busted
+    if player_sum > 21 and computer_sum > 21:
+        return "Both players busted! It's a tie."
+    elif player_sum > 21:
+        return "Computer wins! Player busted."
+    else:
+        return f"{player_one_name} wins! Computer busted."
+    
+# Function to handle Ace value input from the player
 def aceInteger(ace):
     if ace == 'Ace':
         while True:
@@ -61,16 +120,17 @@ def aceInteger(ace):
                 pass
             print("Invalid input. Please enter 1 or 11. ")
 
-
+# Function to convert face cards to their integer values
 def face_cards_converter(card):
     if card in ['Queen', 'Jack', 'King']:
         card = 10
     return card
 
+# Function to sum up six card values
 def sum_of_cards(first_card, second_card, third_card, fourth_card, fifth_card, sixth_card):
     return first_card + second_card + third_card + fourth_card + fifth_card + sixth_card
 
-
+# Function to get player's choice to hit or stand
 def hit_stand():
     while True:
         try:
@@ -81,4 +141,29 @@ def hit_stand():
             pass
         print("Invalid input. Please enter \"hit\" or \"stand\". ")
 
-randomPlayerOneCards()
+# Function to tally wins and games played
+def win_tally():
+    global cards_played, player_wins, computer_wins
+    cards_played += 1
+    if winner == f"{player_one_name} wins! Computer busted.":
+        player_wins += 1
+    else:
+        computer_wins += 1
+    print(f'Total games played: {cards_played}')
+    print(f'{player_one_name} wins: {player_wins}')
+    print(f'Computer wins: {computer_wins}')
+
+
+play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
+winner = determine_winner(playerCards(), computerCards())
+
+# Main game loop
+while play_again == 'yes':
+    print(winner)
+    win_tally()
+    play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
+
+
+
+
+print('Thanks for playing! Goodbye!')
