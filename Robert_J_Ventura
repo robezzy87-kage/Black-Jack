@@ -47,6 +47,12 @@ def playerCards():
     users_cards.append(card_value(second_card))
 
     print(f"Your sum for both cards is: {sum(users_cards)}")
+    if sum(users_cards) == 21:
+        print("Blackjack!")
+        return users_cards
+    if sum(users_cards) > 21:
+        print("You busted!")
+        return users_cards
 
     user_hit_stand = hit_stand()
 
@@ -56,13 +62,17 @@ def playerCards():
         users_cards.append(card_value(new_card))
         print(new_card)
         print(f"Your new sum is: {sum(users_cards)}")
+
         if sum(users_cards) > 21:
             print("you busted!")
             break
+
         elif sum(users_cards) == 21:
             print("Blackjack!")
             break 
+
         user_hit_stand = hit_stand()
+
     return users_cards
 
 
@@ -141,27 +151,28 @@ def hit_stand():
             pass
         print("Invalid input. Please enter \"hit\" or \"stand\". ")
 
-# Function to tally wins and games played
-def win_tally():
+# Function to handle the player's choice to play again
+def win_tally(winner):
     global cards_played, player_wins, computer_wins
     cards_played += 1
+
     if winner == f"{player_one_name} wins! Computer busted.":
         player_wins += 1
     else:
         computer_wins += 1
+
     print(f'Total games played: {cards_played}')
     print(f'{player_one_name} wins: {player_wins}')
     print(f'Computer wins: {computer_wins}')
 
-
 play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
-winner = determine_winner(playerCards(), computerCards())
 
 # Main game loop
 while play_again == 'yes':
-    print(winner)
-    win_tally()
+    winner = determine_winner(playerCards(), computerCards())
+    win_tally(winner)
     play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
+
 
 
 
