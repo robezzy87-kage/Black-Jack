@@ -6,6 +6,9 @@ cards_played = 0
 player_wins = 0
 computer_wins = 0
 
+# Initial betting amount
+betting_amount = 1000
+
 # List of possible cards in the game
 cards = ['Ace', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
 
@@ -13,6 +16,7 @@ cards = ['Ace', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Queen', 'Jack', 'King']
 player_one_name = input('Enter Player 1 name: ')
 print(f'Welcome {player_one_name} to Black Jack!')
 print('Rules: Get as close to 21 as possible without going over. Face cards are worth 10. Aces are worth 1 or 11. enjoy!')
+print("You start with $1000. Good luck!")
 
 # Function to determine the value of a card for the player
 def card_value(card):
@@ -110,13 +114,27 @@ def determine_winner(player_cards, computer_cards):
     player_sum = sum(player_cards)
     computer_sum = sum(computer_cards)
 
-    # Both players busted
+    # Both busted
     if player_sum > 21 and computer_sum > 21:
-        return "Both players busted! It's a tie."
-    elif player_sum > 21:
+        return "It's a tie."
+
+    # One busted
+    if player_sum > 21:
         return "Computer wins! Player busted."
-    else:
+
+    if computer_sum > 21:
         return f"{player_one_name} wins! Computer busted."
+
+    # Both valid → compare closeness
+    player_diff = 21 - player_sum
+    computer_diff = 21 - computer_sum
+
+    if player_diff < computer_diff:
+        return f"{player_one_name} wins!"
+    elif computer_diff < player_diff:
+        return "Computer wins!"
+    else:
+        return "It's a tie."
     
 # Function to handle Ace value input from the player
 def aceInteger(ace):
@@ -153,28 +171,54 @@ def hit_stand():
 
 # Function to handle the player's choice to play again
 def win_tally(winner):
-    global cards_played, player_wins, computer_wins
+    global cards_played, player_wins, computer_wins, betting_amount
     cards_played += 1
 
     if winner == f"{player_one_name} wins! Computer busted.":
         player_wins += 1
+        betting_amount += int(player_betting_amount)
+    elif winner == "It's a tie.":
+        print(f'{player_one_name}, it\'s a tie. You keep your bet.')
     else:
         computer_wins += 1
+        betting_amount -= int(player_betting_amount)
+    if betting_amount <= 0:
+        print(f'{player_one_name}, you have no more money to bet. Game over.')
+        print(f'Total games played: {cards_played}')
+        print(f'{player_one_name} wins: {player_wins}')
+        print(f'Computer wins: {computer_wins}')
+        exit()
 
     print(f'Total games played: {cards_played}')
     print(f'{player_one_name} wins: {player_wins}')
     print(f'Computer wins: {computer_wins}')
 
 play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
+if play_again == 'yes':
+    while True:
+        try:
+            player_betting_amount = int(input("Enter your betting amount you want to bet: "))
+            if player_betting_amount <= betting_amount:
+                break
+        except ValueError:
+            pass
+        print("Invalid input. Please enter a valid number. ")
 
 # Main game loop
 while play_again == 'yes':
     winner = determine_winner(playerCards(), computerCards())
     win_tally(winner)
     play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
-
-
-
-
+    print(f"Your current betting amount is: ${betting_amount}")
+    if play_again == 'yes':
+        while True:
+            try:
+                player_betting_amount = int(input("Enter your betting amount you want to bet: "))
+                if player_betting_amount <= betting_amount:
+                    break
+            except ValueError:
+                pass
+            print("Invalid input. Please enter a valid number. ")
+    
 
 print('Thanks for playing! Goodbye!')
