@@ -1,5 +1,6 @@
 #Black-Jack_Robert_J_Ventura.py
 import random
+import time
 
 # Global variables to keep track of the number of games played and wins
 cards_played = 0
@@ -52,9 +53,11 @@ def playerCards():
 
     print(f"Your sum for both cards is: {sum(users_cards)}")
     if sum(users_cards) == 21:
+        time.sleep(2)
         print("Blackjack!")
         return users_cards
     if sum(users_cards) > 21:
+        time.sleep(2)
         print("You busted!")
         return users_cards
 
@@ -65,13 +68,16 @@ def playerCards():
         new_card = random.choice(cards)
         users_cards.append(card_value(new_card))
         print(new_card)
+        time.sleep(2)
         print(f"Your new sum is: {sum(users_cards)}")
 
         if sum(users_cards) > 21:
+            time.sleep(2)
             print("you busted!")
             break
 
         elif sum(users_cards) == 21:
+            time.sleep(2)
             print("Blackjack!")
             break 
 
@@ -86,6 +92,7 @@ def computerCards():
     first_card = randomCards[0]
     second_card = randomCards[1]
     computer_cards = []
+    print("Computer's cards are: ")
     print(randomCards)
 
     computer_cards.append(card_value_npc(first_card))
@@ -95,16 +102,21 @@ def computerCards():
 
     # Loop to allow the computer to hit until reaching at least 17
     while sum(computer_cards) < 17:
+        time.sleep(2)
+        print("Computer hits.")
         new_card = random.choice(cards)
         if new_card == 'Ace' and sum(computer_cards) + 11 > 21:
             computer_cards.append(1)
         computer_cards.append(card_value_npc(new_card))
+        time.sleep(2)
         print(new_card)
         print(f"Computer's new sum is: {sum(computer_cards)}")
         if sum(computer_cards) > 21:
+            time.sleep(2)
             print("Computer busted!")
             break
         elif sum(computer_cards) == 21:
+            time.sleep(2)
             print("Computer got Blackjack!")
             break 
     return computer_cards
@@ -113,6 +125,7 @@ def computerCards():
 def determine_winner(player_cards, computer_cards):
     player_sum = sum(player_cards)
     computer_sum = sum(computer_cards)
+    time.sleep(2)
 
     # Both busted
     if player_sum > 21 and computer_sum > 21:
@@ -163,6 +176,7 @@ def hit_stand():
     while True:
         try:
             value =  input("Would you like to hit or stand? ").strip().lower()
+            time.sleep(2)
             if value in ('hit', 'stand'):
                 return value
         except ValueError:
@@ -208,6 +222,7 @@ if play_again == 'yes':
 while play_again == 'yes':
     winner = determine_winner(playerCards(), computerCards())
     win_tally(winner)
+    print(winner)
     play_again = input("Would you like to play Black Jack? (yes/no): ").strip().lower()
     print(f"Your current betting amount is: ${betting_amount}")
     if play_again == 'yes':
