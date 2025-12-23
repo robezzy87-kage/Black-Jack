@@ -53,11 +53,11 @@ def playerCards():
 
     print(f"Your sum for both cards is: {sum(users_cards)}")
     if sum(users_cards) == 21:
-        time.sleep(2)
+        time.sleep(1)
         print("Blackjack!")
         return users_cards
     if sum(users_cards) > 21:
-        time.sleep(2)
+        time.sleep(1)
         print("You busted!")
         return users_cards
 
@@ -68,16 +68,16 @@ def playerCards():
         new_card = random.choice(cards)
         users_cards.append(card_value(new_card))
         print(new_card)
-        time.sleep(2)
+        time.sleep(1)
         print(f"Your new sum is: {sum(users_cards)}")
 
         if sum(users_cards) > 21:
-            time.sleep(2)
+            time.sleep(1)
             print("you busted!")
             break
 
         elif sum(users_cards) == 21:
-            time.sleep(2)
+            time.sleep(1)
             print("Blackjack!")
             break 
 
@@ -102,21 +102,21 @@ def computerCards():
 
     # Loop to allow the computer to hit until reaching at least 17
     while sum(computer_cards) < 17:
-        time.sleep(2)
+        time.sleep(1)
         print("Computer hits.")
         new_card = random.choice(cards)
         if new_card == 'Ace' and sum(computer_cards) + 11 > 21:
             computer_cards.append(1)
         computer_cards.append(card_value_npc(new_card))
-        time.sleep(2)
+        time.sleep(1)
         print(new_card)
         print(f"Computer's new sum is: {sum(computer_cards)}")
         if sum(computer_cards) > 21:
-            time.sleep(2)
+            time.sleep(1)
             print("Computer busted!")
             break
         elif sum(computer_cards) == 21:
-            time.sleep(2)
+            time.sleep(1)
             print("Computer got Blackjack!")
             break 
     return computer_cards
@@ -133,10 +133,10 @@ def determine_winner(player_cards, computer_cards):
 
     # One busted
     if player_sum > 21:
-        return "Computer wins! Player busted."
+        return "Computer wins!"
 
     if computer_sum > 21:
-        return f"{player_one_name} wins! Computer busted."
+        return f"{player_one_name} wins!"
 
     # Both valid → compare closeness
     player_diff = 21 - player_sum
@@ -188,7 +188,7 @@ def win_tally(winner):
     global cards_played, player_wins, computer_wins, betting_amount
     cards_played += 1
 
-    if winner == f"{player_one_name} wins! Computer busted.":
+    if winner == f"{player_one_name} wins!":
         player_wins += 1
         betting_amount += int(player_betting_amount)
     elif winner == "It's a tie.":
@@ -196,6 +196,8 @@ def win_tally(winner):
     else:
         computer_wins += 1
         betting_amount -= int(player_betting_amount)
+
+
     if betting_amount <= 0:
         print(f'{player_one_name}, you have no more money to bet. Game over.')
         print(f'Total games played: {cards_played}')
