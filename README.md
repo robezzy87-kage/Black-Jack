@@ -1,1 +1,1 @@
-This code is a woring blackjack game against a computer.
+This code is a working blackjack game against a computer.
